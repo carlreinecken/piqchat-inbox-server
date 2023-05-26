@@ -3,7 +3,8 @@
   "version": "0.1.1",
   "scripts": {
     "lint": "eslint src/ bin/",
-    "start": "nodemon src/main.js"
+    "watch": "nodemon src/main.js",
+    "start": "node src/main.js"
   },
   "type": "module",
   "devDependencies": {
