@@ -94,11 +94,13 @@ export function uploadParcel (request, response) {
     SELECT push_subscription_json FROM users WHERE uuid = @recipient
   `)
 
+  const parcelType = 'IMAGE'
+
   try {
     insert.run({
       uuid: crypto.randomUUID(),
       recipient: request.params.recipient,
-      type: 'IMAGE',
+      type: parcelType,
       content: request.body.content,
       attachment_filename: request.file.filename,
       uploaded_by: request.currentUserUuid,
@@ -121,7 +123,8 @@ export function uploadParcel (request, response) {
     const subscription = recipient.push_subscription_json && JSON.parse(recipient.push_subscription_json)
 
     if (subscription) {
-      const payload = JSON.stringify({ type: 'IMAGE_PARCEL', sender: request.currentUserUuid })
+      const parcelPayload = { type: parcelType, sender: request.currentUserUuid }
+      const payload = JSON.stringify({ type: 'PARCEL', payload: parcelPayload })
 
       const options = {
         TTL: 60 * 60 * 24 * process.env.TIME_TO_LIVE_ON_PUSH_SERVICE_IN_DAYS,

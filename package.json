@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "scripts": {
     "lint": "eslint src/ bin/",
-    "server": "nodemon src/api/main.js"
+    "start": "nodemon src/main.js"
   },
   "type": "module",
   "devDependencies": {
