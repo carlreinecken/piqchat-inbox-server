@@ -210,12 +210,12 @@ export function statusParcelInbox (request, response) {
 
     const lastActivityDate = lastActivitiyStatement.get({
       recipientUuid: request.params.recipient
-    })
+    }).updated_at
 
     let lastSeen = 'NEVER'
 
     if (lastActivityDate) {
-      const daysSinceLastActivity = Date.now() - new Date(lastActivityDate) / 1000 / 60 / 60 / 24
+      const daysSinceLastActivity = (Date.now() - (new Date(lastActivityDate))) / 1000 / 60 / 60 / 24
 
       if (daysSinceLastActivity > 31) {
         lastSeen = 'LONG_TIME'
