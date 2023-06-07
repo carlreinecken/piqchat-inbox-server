@@ -195,13 +195,40 @@ export function statusParcelInbox (request, response) {
       AND recipient_uuid = @recipientUuid
   `)
 
+  // TODO: This is a temporary solution to get the last activity
+  const lastActivitiyStatement = db.prepare(`
+    SELECT updated_at
+    FROM profile_backups
+    WHERE user_uuid = @recipientUuid
+  `)
+
   try {
     const count = countStatement.get({
       uploadedBy: request.currentUserUuid,
       recipientUuid: request.params.recipient
     }).count
 
-    response.send({ count })
+    const lastActivityDate = lastActivitiyStatement.get({
+      recipientUuid: request.params.recipient
+    })
+
+    let lastSeen = 'NEVER'
+
+    if (lastActivityDate) {
+      const daysSinceLastActivity = Date.now() - new Date(lastActivityDate) / 1000 / 60 / 60 / 24
+
+      if (daysSinceLastActivity > 31) {
+        lastSeen = 'LONG_TIME'
+      } else if (daysSinceLastActivity > 7) {
+        lastSeen = 'WITHIN_MONTH'
+      } else if (daysSinceLastActivity > 2) {
+        lastSeen = 'WITHIN_WEEK'
+      } else {
+        lastSeen = 'RECENTLY'
+      }
+    }
+
+    response.send({ count, lastSeen })
   } catch (error) {
     console.error(error)
     response.sendStatus(400)
