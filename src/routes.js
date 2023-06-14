@@ -4,7 +4,7 @@ import signatureMiddleware from './signature-middleware.js'
 
 import { getParcels, uploadParcel, uploadParcelAuthorization, downloadParcel, deleteParcel, statusParcelInbox, statusParcelAccepts } from './parcels.js'
 import { createContactExchange, acceptContactExchange, getContactExchange, allowSignupForContactExchange, revokeContactExchange } from './contact-exchange.js'
-import { updateAccountContacts, registerPushSubscription, getProfileBackup, updateProfileBackup } from './account.js'
+import { getAccount, updateAccountContacts, registerPushSubscription, getProfileBackup, updateProfileBackup } from './account.js'
 
 const router = express.Router()
 
@@ -40,6 +40,7 @@ router.get('/contact-exchange/:oneTimeToken', getContactExchange)
 router.post('/contact-exchange/:oneTimeToken/allow-signup', allowSignupForContactExchange)
 router.delete('/contact-exchange/:oneTimeToken', revokeContactExchange)
 
+router.get('/account', getAccount)
 router.post('/account/contacts', updateAccountContacts)
 router.post('/account/push-subscriptions', registerPushSubscription)
 router.get('/account/backup', getProfileBackup)

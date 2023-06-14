@@ -1,5 +1,32 @@
 import db from './database.js'
 
+export function getAccount (request, response) {
+  const selectStatement = db.prepare(`
+    SELECT push_subscription_json
+    FROM users
+    WHERE uuid = @uuid
+  `)
+
+  try {
+    const user = selectStatement.get({ uuid: request.currentUserUuid })
+
+    if (!user) {
+      response.sendStatus(404)
+      return
+    }
+
+    const pushSubscription = user.push_subscription_json && JSON.parse(user.push_subscription_json)
+    const hasPushSubscription = typeof pushSubscription === 'object' && Object.keys(pushSubscription).length > 0
+
+    response.send({
+      hasPushSubscription
+    })
+  } catch (error) {
+    console.error(error)
+    response.sendStatus(400)
+  }
+}
+
 export function updateAccountContacts (request, response) {
   const updateStatement = db.prepare(`
     UPDATE users SET contacts_json = @contacts

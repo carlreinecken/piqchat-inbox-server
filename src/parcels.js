@@ -94,6 +94,11 @@ export function uploadParcel (request, response) {
     SELECT push_subscription_json FROM users WHERE uuid = @recipient
   `)
 
+  const updatePushSubscriptionStatement = db.prepare(`
+    UPDATE users SET push_subscription_json = @subscription
+    WHERE uuid = @uuid
+  `)
+
   const parcelType = 'IMAGE'
 
   try {
@@ -132,7 +137,16 @@ export function uploadParcel (request, response) {
       }
 
       webpush.sendNotification(subscription, payload, options)
-        .catch(() => { console.log('webpush.sendNotification() failed') })
+        .catch((error) => {
+          if (error.statusCode === 404 || error.statusCode === 410) {
+            updatePushSubscriptionStatement.run({
+              subscription: JSON.stringify({}),
+              uuid: request.params.recipient
+            })
+          } else {
+            console.log(`parcels/uploadParcel webpush.sendNotification failed with "${error?.statusCode || error}" with recipient ${request.params.recipient.substring(0, 5)}...`)
+          }
+        })
     }
   } catch (error) {
     console.error(error)
