@@ -1,4 +1,6 @@
 import db from './database.js'
+import { parsePushSubscription } from './account/send-push-notification.js'
+import { lastSeenDateToLabel } from './account/get-last-seen.js'
 
 export function getAccount (request, response) {
   const selectStatement = db.prepare(`
@@ -15,11 +17,10 @@ export function getAccount (request, response) {
       return
     }
 
-    const pushSubscription = user.push_subscription_json && JSON.parse(user.push_subscription_json)
-    const hasPushSubscription = typeof pushSubscription === 'object' && Object.keys(pushSubscription).length > 0
+    const pushSubscription = parsePushSubscription(user.push_subscription_json)
 
     response.send({
-      hasPushSubscription
+      hasPushSubscription: pushSubscription != null
     })
   } catch (error) {
     console.error(error)
@@ -120,6 +121,42 @@ export function updateProfileBackup (request, response) {
     }
 
     response.sendStatus(204)
+  } catch (error) {
+    console.error(error)
+    response.sendStatus(400)
+  }
+}
+
+export function getInvitedUsers (request, response) {
+  const selectStatement = db.prepare(`
+    SELECT uuid, client_last_seen_at, created_by
+    FROM users
+    WHERE created_by = @userUuid OR uuid = @userUuid
+  `)
+
+  const selectAllStatement = db.prepare(`
+    SELECT uuid, client_version, client_last_seen_at, created_by
+    FROM users
+  `)
+
+  try {
+    let rows
+    const isAdmin = process.env.ADMIN_UUID != null && process.env.ADMIN_UUID === request.currentUserUuid
+
+    if (isAdmin) {
+      rows = selectAllStatement.all()
+    } else {
+      rows = selectStatement.all({ userUuid: request.currentUserUuid })
+    }
+
+    const parcels = rows.map((row) => ({
+      id: row.uuid,
+      clientVersion: isAdmin ? row.client_version : undefined,
+      clientLastSeen: lastSeenDateToLabel(row.client_last_seen_at),
+      createdBy: row.created_by
+    }))
+
+    response.send(parcels)
   } catch (error) {
     console.error(error)
     response.sendStatus(400)
