@@ -6,6 +6,10 @@ import { updateClient } from './account/update-client.js'
 import { getLastSeen } from './account/get-last-seen.js'
 import { isAcceptingFromContact } from './account/is-accepting-from-contact.js'
 
+const PARCEL_TYPES = {
+  IMAGE: 'IMAGE'
+}
+
 export function getParcels (request, response) {
   const select = db.prepare(`
     SELECT uuid, type, content, uploaded_by, uploaded_at
@@ -93,7 +97,8 @@ export function uploadParcel (request, response) {
     VALUES (@uuid, @recipient, @type, @content, @attachment_filename, @uploaded_by, @uploaded_at)
   `)
 
-  const parcelType = 'IMAGE'
+  // TODO: remove image fallback
+  const parcelType = request.body.type ?? PARCEL_TYPES.IMAGE
 
   try {
     insert.run({
@@ -101,7 +106,7 @@ export function uploadParcel (request, response) {
       recipient: request.params.recipient,
       type: parcelType,
       content: request.body.content,
-      attachment_filename: request.file.filename,
+      attachment_filename: request.file?.filename,
       uploaded_by: request.currentUserUuid,
       uploaded_at: (new Date()).toISOString()
     })
@@ -118,10 +123,12 @@ export function uploadParcel (request, response) {
    * Because the sender couldn't care less if the notification fails...
    */
   try {
-    const parcelPayload = { type: parcelType, sender: request.currentUserUuid }
-    const payload = JSON.stringify({ type: 'PARCEL', payload: parcelPayload })
+    if (parcelType === PARCEL_TYPES.IMAGE) {
+      const parcelPayload = { type: parcelType, sender: request.currentUserUuid }
+      const payload = JSON.stringify({ type: 'PARCEL', payload: parcelPayload })
 
-    sendPushNotification(request.params.recipient, payload)
+      sendPushNotification(request.params.recipient, payload)
+    }
   } catch (error) {
     console.error(error)
   }

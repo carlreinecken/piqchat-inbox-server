@@ -22,4 +22,4 @@ insertUserStatement.run({
 })
 
 console.log('Paste the following text into the "accept/scan friend invite" box:')
-console.log('INPUT_SERVER_INBOX_INFO\n<host>')
+console.log('INPUT_SERVER_INBOX:<host>')
