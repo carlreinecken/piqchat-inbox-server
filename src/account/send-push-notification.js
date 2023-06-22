@@ -35,7 +35,7 @@ export async function sendPushNotification (recipientUuid, payload) {
     if (error.statusCode === 404 || error.statusCode === 410) {
       updatePushSubscriptionStatement.run({
         subscription: JSON.stringify({}),
-        uuid: recipientUuid
+        recipientUuid
       })
     } else {
       console.log(`sendPushNotification failed with "${error?.statusCode || error}" with recipient ${recipientUuid.substring(0, 5)}...`)
