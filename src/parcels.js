@@ -1,14 +1,7 @@
 import * as fs from 'node:fs'
-import crypto from 'crypto'
 import db from './database.js'
-import { sendPushNotification } from './account/send-push-notification.js'
 import { updateClient } from './account/update-client.js'
 import { getLastSeen } from './account/get-last-seen.js'
-import { isAcceptingFromContact } from './account/is-accepting-from-contact.js'
-
-const PARCEL_TYPES = {
-  IMAGE: 'IMAGE'
-}
 
 export function getParcels (request, response) {
   const select = db.prepare(`
@@ -77,63 +70,6 @@ export function downloadParcel (request, response) {
   }
 }
 
-export function uploadParcelAuthorization (request, response, next) {
-  try {
-    if (!isAcceptingFromContact(request.params.recipient, request.currentUserUuid)) {
-      response.sendStatus(403)
-      return
-    }
-
-    next()
-  } catch (error) {
-    console.error(error)
-    response.sendStatus(400)
-  }
-}
-
-export function uploadParcel (request, response) {
-  const insert = db.prepare(`
-    INSERT INTO parcels (uuid, recipient_uuid, type, content, attachment_filename, uploaded_by, uploaded_at)
-    VALUES (@uuid, @recipient, @type, @content, @attachment_filename, @uploaded_by, @uploaded_at)
-  `)
-
-  // TODO: remove image fallback
-  const parcelType = request.body.type ?? PARCEL_TYPES.IMAGE
-
-  try {
-    insert.run({
-      uuid: crypto.randomUUID(),
-      recipient: request.params.recipient,
-      type: parcelType,
-      content: request.body.content,
-      attachment_filename: request.file?.filename,
-      uploaded_by: request.currentUserUuid,
-      uploaded_at: (new Date()).toISOString()
-    })
-  } catch (error) {
-    console.error(error)
-    response.sendStatus(400)
-    return
-  }
-
-  response.sendStatus(201)
-
-  /**
-   * After this point nothing is send to the client anymore.
-   * Because the sender couldn't care less if the notification fails...
-   */
-  try {
-    if (parcelType === PARCEL_TYPES.IMAGE) {
-      const parcelPayload = { type: parcelType, sender: request.currentUserUuid }
-      const payload = JSON.stringify({ type: 'PARCEL', payload: parcelPayload })
-
-      sendPushNotification(request.params.recipient, payload)
-    }
-  } catch (error) {
-    console.error(error)
-  }
-}
-
 export function deleteParcel (request, response) {
   const deleteStatement = db.prepare(`
     DELETE FROM parcels
@@ -146,6 +82,12 @@ export function deleteParcel (request, response) {
     FROM parcels
     WHERE recipient_uuid = @recipientUuid
       AND uuid = @uuid
+  `)
+
+  const countAttachmentsStatement = db.prepare(`
+    SELECT COUNT (*) AS count
+    FROM parcels
+    WHERE attachment_filename = @attachmentFilename
   `)
 
   try {
@@ -163,10 +105,15 @@ export function deleteParcel (request, response) {
 
     deleteStatement.run(parameters)
 
-    const path = process.env.PARCEL_ATTACHMENTS_UPLOAD_PATH + parcel.attachment_filename
+    const countAttachments = countAttachmentsStatement.get({ attachmentFilename: parcel.attachment_filename }).count
 
-    if (fs.existsSync(path)) {
-      fs.unlinkSync(path)
+    // Only delete the file if no other parcel has a reference to it
+    if (countAttachments === 0) {
+      const path = process.env.PARCEL_ATTACHMENTS_UPLOAD_PATH + parcel.attachment_filename
+
+      if (fs.existsSync(path)) {
+        fs.unlinkSync(path)
+      }
     }
 
     response.sendStatus(204)
