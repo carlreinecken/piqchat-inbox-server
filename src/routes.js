@@ -5,7 +5,7 @@ import signatureMiddleware from './signature-middleware.js'
 import { getParcels, downloadParcel, deleteParcel, statusParcelInbox } from './parcels.js'
 import { uploadParcelForOne, uploadParcelGroup, uploadParcelAuthorizationForOne, uploadParcelGroupAuthorization } from './parcels/upload.js'
 import { createContactExchange, acceptContactExchange, getContactExchange, allowSignupForContactExchange, revokeContactExchange } from './contact-exchange.js'
-import { getAccount, updateAccountContacts, registerPushSubscription, getProfileBackup, updateProfileBackup, getInvitedUsers } from './account.js'
+import { getAccount, updateAccountContacts, registerPushSubscription, getProfileBackup, updateProfileBackup, getInvitedUsers, deleteProfile } from './account.js'
 import { getInfo } from './meta/controller.js'
 
 const router = express.Router()
@@ -43,5 +43,6 @@ router.post('/account/push-subscriptions', registerPushSubscription)
 router.get('/account/backup', getProfileBackup)
 router.post('/account/backup', updateProfileBackup)
 router.get('/account/invited-users', getInvitedUsers)
+router.post('/account/delete', deleteProfile)
 
 export default router

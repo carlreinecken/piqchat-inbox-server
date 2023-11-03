@@ -1,6 +1,7 @@
 import db from './database.js'
 import { parsePushSubscription } from './account/send-push-notification.js'
 import { lastSeenDateToLabel } from './account/get-last-seen.js'
+import { deleteParcelsAndAttachmentForUser } from './parcels/delete-parcel.js'
 
 export function getAccount (request, response) {
   const selectStatement = db.prepare(`
@@ -157,6 +158,39 @@ export function getInvitedUsers (request, response) {
     }))
 
     response.send(parcels)
+  } catch (error) {
+    console.error(error)
+    response.sendStatus(400)
+  }
+}
+
+export function deleteProfile (request, response) {
+  const deleteBackupStatement = db.prepare(`
+    DELETE FROM profile_backups
+    WHERE user_uuid = @userUuid
+  `)
+
+  const updateUserStatement = db.prepare(`
+    UPDATE users SET
+      push_subscription_json = '{}',
+      contacts_json = '[]',
+      client_version = null,
+      client_last_seen_at = null,
+      created_at = '2023-01-01T00:00:00.000Z'
+    WHERE uuid = @userUuid
+  `)
+
+  try {
+    deleteParcelsAndAttachmentForUser(request.currentUserUuid)
+
+    deleteBackupStatement.run({ userUuid: request.currentUserUuid })
+
+    // TODO: the users.uuid may count as personal data which also needs to be removed/replaced. however that would currently break the invite tree
+    updateUserStatement.run({ userUuid: request.currentUserUuid })
+
+    // TODO: remove conctact_exchanges? or is the automatic cleanup enough?
+
+    response.sendStatus(204)
   } catch (error) {
     console.error(error)
     response.sendStatus(400)

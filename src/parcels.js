@@ -2,6 +2,7 @@ import * as fs from 'node:fs'
 import db from './database.js'
 import { updateClient } from './account/update-client.js'
 import { getLastSeen } from './account/get-last-seen.js'
+import { deleteParcelAndAttachment } from './parcels/delete-parcel.js'
 
 export function getParcels (request, response) {
   const select = db.prepare(`
@@ -71,50 +72,25 @@ export function downloadParcel (request, response) {
 }
 
 export function deleteParcel (request, response) {
-  const deleteStatement = db.prepare(`
-    DELETE FROM parcels
-    WHERE recipient_uuid = @recipientUuid
-      AND uuid = @uuid
-  `)
-
-  const select = db.prepare(`
+  const selectStatement = db.prepare(`
     SELECT attachment_filename
     FROM parcels
     WHERE recipient_uuid = @recipientUuid
       AND uuid = @uuid
   `)
 
-  const countAttachmentsStatement = db.prepare(`
-    SELECT COUNT (*) AS count
-    FROM parcels
-    WHERE attachment_filename = @attachmentFilename
-  `)
-
   try {
-    const parameters = {
+    const parcel = selectStatement.get({
       recipientUuid: request.currentUserUuid,
       uuid: request.params.uuid
-    }
-
-    const parcel = select.get(parameters)
+    })
 
     if (!parcel) {
       response.sendStatus(404)
       return
     }
 
-    deleteStatement.run(parameters)
-
-    const countAttachments = countAttachmentsStatement.get({ attachmentFilename: parcel.attachment_filename }).count
-
-    // Only delete the file if no other parcel has a reference to it
-    if (countAttachments === 0) {
-      const path = process.env.PARCEL_ATTACHMENTS_UPLOAD_PATH + parcel.attachment_filename
-
-      if (fs.existsSync(path)) {
-        fs.unlinkSync(path)
-      }
-    }
+    deleteParcelAndAttachment(request.currentUserUuid, request.params.uuid, parcel.attachment_filename)
 
     response.sendStatus(204)
   } catch (error) {
