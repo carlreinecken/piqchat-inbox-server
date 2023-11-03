@@ -176,14 +176,14 @@ export function acceptContactExchange (request, response) {
     const row = selectStatement.get({ one_time_token: request.params.oneTimeToken })
 
     if (!row || row.state !== STATE.INITIATED) {
-      response.sendStatus(404)
+      response.status(404).send('The friend invite can not be found or was already used.')
       return
     }
 
     const timeToLive = calculateTimeToAcceptUntil(new Date(row.created_at))
 
     if (timeToLive < new Date()) {
-      response.sendStatus(404)
+      response.status(404).send('The friend invite is expired and can not be used anymore.')
       return
     }
 
