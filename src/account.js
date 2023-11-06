@@ -176,7 +176,7 @@ export function deleteProfile (request, response) {
       contacts_json = '[]',
       client_version = null,
       client_last_seen_at = null,
-      created_at = '2023-01-01T00:00:00.000Z'
+      created_at = null
     WHERE uuid = @userUuid
   `)
 
@@ -186,7 +186,11 @@ export function deleteProfile (request, response) {
     deleteBackupStatement.run({ userUuid: request.currentUserUuid })
 
     // TODO: the users.uuid may count as personal data which also needs to be removed/replaced. however that would currently break the invite tree
-    updateUserStatement.run({ userUuid: request.currentUserUuid })
+    const result = updateUserStatement.run({ userUuid: request.currentUserUuid })
+
+    if (result.changes === 0) {
+      return response.sendStatus(404)
+    }
 
     // TODO: remove conctact_exchanges? or is the automatic cleanup enough?
 

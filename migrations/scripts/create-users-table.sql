@@ -5,6 +5,6 @@ CREATE TABLE IF NOT EXISTS users (
     contacts_json TEXT NOT NULL, /* JSON array of uuids */
     client_version TEXT,
     client_last_seen_at TEXT,
-    created_at TEXT NOT NULL,
+    created_at TEXT,
     created_by TEXT
 );
