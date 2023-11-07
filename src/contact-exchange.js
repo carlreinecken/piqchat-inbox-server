@@ -17,7 +17,7 @@ export function createContactExchange (request, response) {
     INSERT INTO contact_exchanges (one_time_token, state, encrypted_contact, allow_signup, created_at, created_by)
     VALUES (@one_time_token, @state, @encrypted_contact, true, @created_at, @created_by)
   `)
-  const countUserStatement = db.prepare('SELECT COUNT(*) AS count FROM users WHERE uuid = @uuid')
+  const countUserStatement = db.prepare('SELECT COUNT(*) AS count FROM users WHERE uuid = @uuid AND created_at IS NOT NULL')
 
   const oneTimeToken = crypto.randomUUID()
   const createdAt = new Date()
@@ -170,6 +170,12 @@ export function acceptContactExchange (request, response) {
     INSERT INTO users (uuid, push_subscription_json, contacts_json, created_at, created_by)
     VALUES (@uuid, '{}', '[]', @created_at, @created_by)
   `)
+  const reactivateUserStatement = db.prepare(`
+    UPDATE users SET
+      created_at = @created_at
+    WHERE uuid = @uuid
+      AND created_at IS NULL
+  `)
   const countUserStatement = db.prepare('SELECT COUNT(*) AS count FROM users WHERE uuid = @uuid')
 
   try {
@@ -194,19 +200,23 @@ export function acceptContactExchange (request, response) {
 
     if (request.body.userUuid != null && !row.allow_signup) {
       // If the client sends an Uuid, the exchange MUST HAVE the allowance to create a user
-      response.status(403).send('A signup is not allowed. Try again after the offerer has clicked "allow signup".')
+      response.status(403).send('A signup is not allowed. Try again after the inviter has clicked "allow signup".')
       return
     }
 
     if (row.allow_signup && request.body.userUuid != null) {
       const existsAsUser = countUserStatement.get({ uuid: request.body.userUuid }).count === 1
+      const parameters = {
+        uuid: request.body.userUuid,
+        created_at: (new Date()).toISOString(),
+        created_by: row.created_by
+      }
 
-      if (!existsAsUser) {
-        const insertResult = insertUserStatement.run({
-          uuid: request.body.userUuid,
-          created_at: (new Date()).toISOString(),
-          created_by: row.created_by
-        })
+      if (existsAsUser) {
+        // Reactivate old user
+        reactivateUserStatement.run(parameters)
+      } else {
+        const insertResult = insertUserStatement.run(parameters)
 
         if (insertResult.changes === 1) {
           responseBody.createdUserAccount = true

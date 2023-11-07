@@ -3,6 +3,7 @@ import db from '../database.js'
 export function isAcceptingFromContact (userUuid, contactUuid) {
   const selectUserStatement = db.prepare(`
     SELECT contacts_json FROM users WHERE uuid = @userUuid
+      AND created_at IS NOT NULL
   `)
 
   const user = selectUserStatement.get({ userUuid })

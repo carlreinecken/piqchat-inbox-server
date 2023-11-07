@@ -8,6 +8,7 @@ export function getAccount (request, response) {
     SELECT push_subscription_json
     FROM users
     WHERE uuid = @uuid
+      AND created_at IS NOT NULL
   `)
 
   try {
@@ -33,6 +34,7 @@ export function updateAccountContacts (request, response) {
   const updateStatement = db.prepare(`
     UPDATE users SET contacts_json = @contacts
     WHERE uuid = @uuid
+      AND created_at IS NOT NULL
   `)
 
   try {
@@ -52,6 +54,7 @@ export function registerPushSubscription (request, response) {
   const updateStatement = db.prepare(`
     UPDATE users SET push_subscription_json = @subscription
     WHERE uuid = @uuid
+      AND created_at IS NOT NULL
   `)
 
   try {
