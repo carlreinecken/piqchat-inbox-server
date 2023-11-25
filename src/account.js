@@ -1,14 +1,14 @@
 import db from './database.js'
 import { parsePushSubscription } from './account/send-push-notification.js'
-import { lastSeenDateToLabel } from './account/get-last-seen.js'
 import { deleteParcelsAndAttachmentForUser } from './parcels/delete-parcel.js'
+
+export { getInvitedUsers } from './account/get-invited-users.js'
 
 export function getAccount (request, response) {
   const selectStatement = db.prepare(`
     SELECT push_subscription_json
     FROM users
     WHERE uuid = @uuid
-      AND created_at IS NOT NULL
   `)
 
   try {
@@ -34,7 +34,6 @@ export function updateAccountContacts (request, response) {
   const updateStatement = db.prepare(`
     UPDATE users SET contacts_json = @contacts
     WHERE uuid = @uuid
-      AND created_at IS NOT NULL
   `)
 
   try {
@@ -54,7 +53,6 @@ export function registerPushSubscription (request, response) {
   const updateStatement = db.prepare(`
     UPDATE users SET push_subscription_json = @subscription
     WHERE uuid = @uuid
-      AND created_at IS NOT NULL
   `)
 
   try {
@@ -131,42 +129,6 @@ export function updateProfileBackup (request, response) {
   }
 }
 
-export function getInvitedUsers (request, response) {
-  const selectStatement = db.prepare(`
-    SELECT uuid, client_last_seen_at, created_by
-    FROM users
-    WHERE created_by = @userUuid OR uuid = @userUuid
-  `)
-
-  const selectAllStatement = db.prepare(`
-    SELECT uuid, client_version, client_last_seen_at, created_by
-    FROM users
-  `)
-
-  try {
-    let rows
-    const isAdmin = process.env.ADMIN_UUID != null && process.env.ADMIN_UUID === request.currentUserUuid
-
-    if (isAdmin) {
-      rows = selectAllStatement.all()
-    } else {
-      rows = selectStatement.all({ userUuid: request.currentUserUuid })
-    }
-
-    const parcels = rows.map((row) => ({
-      id: row.uuid,
-      clientVersion: isAdmin ? row.client_version : undefined,
-      clientLastSeen: lastSeenDateToLabel(row.client_last_seen_at),
-      createdBy: row.created_by
-    }))
-
-    response.send(parcels)
-  } catch (error) {
-    console.error(error)
-    response.sendStatus(400)
-  }
-}
-
 export function deleteProfile (request, response) {
   const deleteBackupStatement = db.prepare(`
     DELETE FROM profile_backups
@@ -175,6 +137,7 @@ export function deleteProfile (request, response) {
 
   const updateUserStatement = db.prepare(`
     UPDATE users SET
+      uuid = null,
       push_subscription_json = '{}',
       contacts_json = '[]',
       client_version = null,

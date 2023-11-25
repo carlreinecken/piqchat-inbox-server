@@ -30,12 +30,7 @@ export function acceptContactExchange (request, response) {
     INSERT INTO users (uuid, push_subscription_json, contacts_json, created_at, created_by)
     VALUES (@uuid, '{}', '[]', @created_at, @created_by)
   `)
-  const reactivateUserStatement = db.prepare(`
-    UPDATE users SET
-      created_at = @created_at
-    WHERE uuid = @uuid
-      AND created_at IS NULL
-  `)
+
   const countUserStatement = db.prepare('SELECT COUNT(*) AS count FROM users WHERE uuid = @uuid')
 
   try {
@@ -60,17 +55,13 @@ export function acceptContactExchange (request, response) {
 
     if (request.body.userUuid != null) {
       const existsAsUser = countUserStatement.get({ uuid: request.body.userUuid }).count === 1
-      const parameters = {
-        uuid: request.body.userUuid,
-        created_at: (new Date()).toISOString(),
-        created_by: row.created_by
-      }
 
-      if (existsAsUser) {
-        // Reactivate old user
-        reactivateUserStatement.run(parameters)
-      } else {
-        const insertResult = insertUserStatement.run(parameters)
+      if (!existsAsUser) {
+        const insertResult = insertUserStatement.run({
+          uuid: request.body.userUuid,
+          created_at: (new Date()).toISOString(),
+          created_by: row.created_by
+        })
 
         if (insertResult.changes === 1) {
           responseBody.createdUserAccount = true

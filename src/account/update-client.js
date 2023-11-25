@@ -6,7 +6,6 @@ export function updateClient (userUuid, headers) {
       client_version = @client_version,
       client_last_seen_at = @client_last_seen_at
     WHERE uuid = @uuid
-      AND created_at IS NOT NULL
   `)
 
   try {

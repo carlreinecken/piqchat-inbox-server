@@ -5,7 +5,6 @@ export function getLastSeen (userUuid) {
     SELECT client_last_seen_at
     FROM users
     WHERE uuid = @userUuid
-      AND created_at IS NOT NULL
   `)
 
   const lastSeenDate = lastSeenStatement.get({ userUuid })?.client_last_seen_at
