@@ -4,7 +4,7 @@ import signatureMiddleware from './signature-middleware.js'
 
 import { getParcels, downloadParcel, deleteParcel, statusParcelInbox } from './parcels.js'
 import { uploadParcelForOne, uploadParcelGroup, uploadParcelAuthorizationForOne, uploadParcelGroupAuthorization } from './parcels/upload.js'
-import { createContactExchange, acceptContactExchange, getContactExchange, allowSignupForContactExchange, revokeContactExchange } from './contact-exchange.js'
+import { createContactExchange, acceptContactExchange, getContactExchange, revokeContactExchange } from './contact-exchange.js'
 import { getAccount, updateAccountContacts, registerPushSubscription, getProfileBackup, updateProfileBackup, getInvitedUsers, deleteProfile } from './account.js'
 import { getInfo } from './meta/controller.js'
 
@@ -34,7 +34,6 @@ router.delete('/parcels/:uuid', deleteParcel)
 
 router.post('/contact-exchange', createContactExchange)
 router.get('/contact-exchange/:oneTimeToken', getContactExchange)
-router.post('/contact-exchange/:oneTimeToken/allow-signup', allowSignupForContactExchange)
 router.delete('/contact-exchange/:oneTimeToken', revokeContactExchange)
 
 router.get('/account', getAccount)

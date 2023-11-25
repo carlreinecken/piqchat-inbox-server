@@ -22,9 +22,11 @@ supervisorctl reread
 supervisorctl update
 ```
 
-then setup the web backend
+then setup the domain and the web backend
 
 ```
+uberspace web domain add piqchat.reinecken.net
+
 uberspace web backend set piqchat.reinecken.net --http --port 1025
 ```
 
@@ -53,7 +55,6 @@ for deploying you can use this bash script
 cd piqchat-inbox-server
 git pull ../repositories/piqchat-inbox-server
 npm install --no-save
-npm run build
 echo "run migrations!"
 supervisorctl restart piqchat-inbox-server
 ```
