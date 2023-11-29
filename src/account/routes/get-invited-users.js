@@ -1,5 +1,5 @@
-import db from '../database.js'
-import { lastSeenDateToLabel } from './get-last-seen.js'
+import db from '../../database.js'
+import { lastSeenDateToLabel } from '../get-last-seen.js'
 
 export function getInvitedUsers (request, response) {
   const selectStatement = db.prepare(`

@@ -1,6 +1,6 @@
-import db from '../database.js'
-import { CONTACT_EXCHANGE_STATE } from '../constants.js'
-import { calculateTimeToAcceptUntil } from './calculate-time-to-live.js'
+import db from '../../database.js'
+import { CONTACT_EXCHANGE_STATE } from '../../constants.js'
+import { calculateTimeToAcceptUntil } from './../calculate-time-to-live.js'
 
 /**
  * This one request does A LOT.
@@ -64,6 +64,7 @@ export function acceptContactExchange (request, response) {
         })
 
         if (insertResult.changes === 1) {
+          // TODO: delete this if all clients have updated to >0.1.4
           responseBody.createdUserAccount = true
         }
       }

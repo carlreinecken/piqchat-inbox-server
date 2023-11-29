@@ -75,7 +75,7 @@ export function uploadParcelGroup (request, response) {
   }
 }
 
-export function insertParcel (recipientUserIds, parcelType, content, filename, currentUserUuid) {
+function insertParcel (recipientUserIds, parcelType, content, filename, currentUserUuid) {
   const insert = db.prepare(`
     INSERT INTO parcels (uuid, recipient_uuid, type, content, attachment_filename, uploaded_by, uploaded_at)
     VALUES (@uuid, @recipient_uuid, @type, @content, @attachment_filename, @uploaded_by, @uploaded_at)

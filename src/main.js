@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import path from 'path'
 import * as dotenv from 'dotenv'
-import routes from './routes.js'
+import { apiRouter } from './api-router.js'
 
 dotenv.config()
 
@@ -16,8 +16,18 @@ app.get('/', (_, response) => {
   response.sendFile(path.join(__dirname, '/index.html'))
 })
 
-app.use('/api/', routes)
+app.use('/api/', apiRouter)
 
-const listener = app.listen(process.env.PORT, () => {
-  console.log(`Listening on port ${listener.address().port}`)
+const server = app.listen(process.env.PORT, () => {
+  console.log(`Listening on port ${server.address().port}`)
+})
+
+process.on('SIGTERM', () => {
+  console.log('SIGTERM signal received: closing HTTP server')
+
+  const port = server.address().port
+
+  server.close(() => {
+    console.log(`No longer listening on port ${port}`)
+  })
 })
