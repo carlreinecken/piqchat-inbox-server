@@ -18,7 +18,7 @@ accountRouter.post('/push-subscriptions', registerPushSubscription)
 accountRouter.get('/backup', getProfileBackup)
 accountRouter.post('/backup', updateProfileBackup)
 accountRouter.get('/invited-users', getInvitedUsers)
-accountRouter.delete('/delete', deleteAccount)
+accountRouter.delete('/', deleteAccount)
 
 // @deprecated
 accountRouter.post('/delete', deleteAccount)

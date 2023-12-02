@@ -3,4 +3,5 @@ node_modules
 *.sqlite
 *.env
 !example.env
+!test.env
 parcel_attachments/

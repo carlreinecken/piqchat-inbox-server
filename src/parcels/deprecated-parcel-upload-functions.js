@@ -9,6 +9,9 @@ const PARCEL_TYPES = {
   MEDIA: 'MEDIA'
 }
 
+/**
+ * @deprecated
+ */
 export function uploadParcelGroupAuthorization (request, response, next) {
   try {
     const allRecipientIds = request.params.recipients.split(',')
@@ -41,6 +44,9 @@ export function uploadParcelGroupAuthorization (request, response, next) {
   }
 }
 
+/**
+ * @deprecated
+ */
 export function uploadParcelGroup (request, response) {
   const parcelType = request.body.type
   const contents = JSON.parse(request.body.contents)
@@ -100,6 +106,9 @@ function insertParcel (recipientUserIds, parcelType, content, filename, currentU
   }
 }
 
+/**
+ * @deprecated
+ */
 export function uploadParcelAuthorizationForOne (request, response, next) {
   try {
     if (!isAcceptingFromContact(request.params.recipient, request.currentUserUuid)) {
@@ -114,6 +123,9 @@ export function uploadParcelAuthorizationForOne (request, response, next) {
   }
 }
 
+/**
+ * @deprecated
+ */
 export function uploadParcelForOne (request, response) {
   const parcelType = request.body.type ?? PARCEL_TYPES.IMAGE
 

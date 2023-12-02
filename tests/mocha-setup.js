@@ -1,6 +1,6 @@
 import * as fs from 'node:fs'
 import express from 'express'
-import { beforeEach, afterEach } from 'mocha'
+import { beforeEach, afterEach, after } from 'mocha'
 import './mocha-setup-env.js' // This needs to run BEFORE any other imports that call `new Database`
 import { apiRouter } from '../src/api-router.js'
 import db from '../src/database.js'
@@ -36,4 +36,10 @@ afterEach(function (done) {
 
     done()
   })
+})
+
+after(function () {
+  const path = process.env.PARCEL_ATTACHMENTS_UPLOAD_PATH
+
+  fs.rmSync(path, { recursive: true })
 })

@@ -2,3 +2,7 @@ export const CONTACT_EXCHANGE_STATE = {
   INITIATED: 'INITIATED',
   ACCEPTED: 'ACCEPTED'
 }
+
+export const PARCEL_TYPES = {
+  MEDIA: 'MEDIA'
+}
