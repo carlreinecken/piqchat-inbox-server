@@ -12,3 +12,14 @@ apiRouter.get('/info', getInfo)
 apiRouter.use('/contact-exchange/', contactExchangeRouter)
 apiRouter.use('/parcels/', parcelsRouter)
 apiRouter.use('/account/', accountRouter)
+
+apiRouter.use((error, _, response, next) => {
+  if (response.headersSent) {
+    return next(error)
+  }
+
+  console.error(error.stack)
+
+  // Send only plaintext errors, no HTML!
+  response.status(500).send(error.message)
+})

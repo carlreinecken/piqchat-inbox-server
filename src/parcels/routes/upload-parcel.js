@@ -29,7 +29,7 @@ export function uploadParcel (request, response) {
       // If no one of the recipients exist or won't accept a parcel from the current user it should abort
       response.sendStatus(403)
 
-      if (fs.existsSync(request.file.path)) {
+      if (request?.file?.path && fs.existsSync(request.file.path)) {
         fs.unlinkSync(request.file.path)
       }
 

@@ -18,7 +18,10 @@ export const parcelsRouter = express.Router()
 
 parcelsRouter.use(signatureMiddleware)
 
-const parseFile = multer({ dest: process.env.PARCEL_ATTACHMENTS_UPLOAD_PATH, limits: { fieldSize: 100000 } })
+const parseFile = multer({
+  dest: process.env.PARCEL_ATTACHMENTS_UPLOAD_PATH,
+  limits: { fileSize: 20_000_000 } // 20 Megabyte
+})
 
 /**
  * --------------
