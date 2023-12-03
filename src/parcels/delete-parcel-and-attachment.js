@@ -14,7 +14,10 @@ export function deleteParcelAndAttachment (recipientUuid, parcelUuid, attachment
     WHERE attachment_filename = @attachmentFilename
   `)
 
-  deleteStatement.run({ recipientUuid, uuid: parcelUuid })
+  deleteStatement.run({
+    recipientUuid, // NOTE: only the recipient of the parcel should be able to delete the parcel
+    uuid: parcelUuid
+  })
 
   const attachmentReferenceCount = countAttachmentsStatement.get({ attachmentFilename }).count
 

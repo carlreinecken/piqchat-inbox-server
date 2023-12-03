@@ -1,5 +1,6 @@
 import db from '../../database.js'
 import { getLastSeen } from '../../account/get-last-seen.js'
+import { PARCEL_TYPES } from '../../constants.js'
 
 /**
  * This request can be used by anyone, to check how many undeleted
@@ -13,6 +14,7 @@ export function getParcelStatusForRecipient (request, response) {
     FROM parcels
     WHERE uploaded_by = @uploadedBy
       AND recipient_uuid = @recipientUuid
+      AND type = '${PARCEL_TYPES.MEDIA}'
   `)
 
   try {

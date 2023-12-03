@@ -57,7 +57,7 @@ for deploying you can use this bash script
 cd piqchat-inbox-server
 git pull ../repositories/piqchat-inbox-server
 npm install --no-save
-echo "run migrations!"
+echo "WARNING! You need run migrations manually!"
 supervisorctl restart piqchat-inbox-server
 ```
 
