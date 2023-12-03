@@ -11,8 +11,10 @@ command=node main.js
 autostart=true
 autorestart=true
 environment=NODE_ENV=production
-# `startsecs` is set by Uberspace monitoring team, to prevent a broken service from looping
+# `startsecs` prevents a broken service from looping
 startsecs=30
+# `stopasgroup` is necessary because `npm run start` starts node as child process
+stopasgroup=true
 ```
 
 then

@@ -19,15 +19,18 @@ app.get('/', (_, response) => {
 app.use('/api/', apiRouter)
 
 const server = app.listen(process.env.PORT, () => {
-  console.log(`Listening on port ${server.address().port}`)
+  console.log(`Listening on port ${server.address().port} with pid ${process?.pid}`)
 })
 
-process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server')
+process.on('SIGTERM', shutdown)
+process.on('SIGINT', shutdown)
 
+function shutdown () {
   const port = server.address().port
+
+  console.log(`Closing server that is listening on port ${port}`)
 
   server.close(() => {
     console.log(`No longer listening on port ${port}`)
   })
-})
+}
