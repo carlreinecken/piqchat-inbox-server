@@ -3,6 +3,7 @@ import crypto from 'crypto'
 import db from '../database.js'
 import { sendPushNotification } from '../account/send-push-notification.js'
 import { isAcceptingFromContact } from '../account/is-accepting-from-contact.js'
+import { countReceivedParcels } from './count-received-parcels.js'
 
 const PARCEL_TYPES = {
   IMAGE: 'IMAGE',
@@ -76,6 +77,8 @@ export function uploadParcelGroup (request, response) {
         sendPushNotification(recipientUserId, payload)
       }
     }
+
+    countReceivedParcels(request.authorizedRecipientUserIds.length, parcelType)
   } catch (error) {
     console.error(error)
   }
@@ -150,6 +153,8 @@ export function uploadParcelForOne (request, response) {
 
       sendPushNotification(request.params.recipient, payload)
     }
+
+    countReceivedParcels(1, parcelType)
   } catch (error) {
     console.error(error)
   }

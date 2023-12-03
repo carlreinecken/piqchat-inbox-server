@@ -11,7 +11,7 @@ import { calculateTimeToAcceptUntil } from './../calculate-time-to-live.js'
  * - Is only does anything if the exchange model is still in state INITIATED
  * - Changes the state to ACCEPTED
  * - Expects an encryptedContact as request body and writes that into the table
- * - Creates a new permenant access token, if the requiring user has none yet
+ * - Creates a new user account if the requiring user has none yet and provided their id
  * - Returns in the response the previously encryptedContact from the table
  */
 export function acceptContactExchange (request, response) {
