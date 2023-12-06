@@ -1,3 +1,5 @@
+-- UP
+
 CREATE TABLE IF NOT EXISTS contact_exchanges (
     id INTEGER PRIMARY KEY NOT NULL,
     state TEXT NOT NULL,
@@ -6,3 +8,7 @@ CREATE TABLE IF NOT EXISTS contact_exchanges (
     created_at TEXT NOT NULL,
     created_by INTEGER NOT NULL
 );
+
+-- DOWN
+
+DROP TABLE contact_exchanges;

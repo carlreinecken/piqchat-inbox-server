@@ -4,6 +4,7 @@
   "scripts": {
     "lint": "eslint src/ bin/",
     "test": "mocha --file tests/mocha-setup.js --recursive tests/ --extension .test.js",
+    "migrate": "node bin/migrate.js",
     "watch": "nodemon src/main.js",
     "start": "node src/main.js"
   },

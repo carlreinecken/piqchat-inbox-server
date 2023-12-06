@@ -1,3 +1,5 @@
+-- UP
+
 CREATE TABLE IF NOT EXISTS profile_backups (
     id INTEGER PRIMARY KEY NOT NULL,
     user_uuid TEXT NOT NULL,
@@ -5,3 +7,7 @@ CREATE TABLE IF NOT EXISTS profile_backups (
     updated_at TEXT NOT NULL,
     last_read_at TEXT
 );
+
+-- DOWN
+
+DROP TABLE profile_backups;

@@ -1,3 +1,5 @@
+-- UP
+
 CREATE TABLE IF NOT EXISTS parcels (
     id INTEGER PRIMARY KEY NOT NULL,
     uuid TEXT NOT NULL,
@@ -10,3 +12,8 @@ CREATE TABLE IF NOT EXISTS parcels (
 );
 
 CREATE UNIQUE INDEX idx_parcel_uuid ON parcels (uuid);
+
+-- DOWN
+
+DROP INDEX idx_parcel_uuid;
+DROP TABLE parcels;
