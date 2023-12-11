@@ -6,8 +6,11 @@ export function cleanupInactiveUsers () {
   const selectUsersStatement = db.prepare(`
     SELECT uuid
     FROM users
-    WHERE created_at < date('now', @dateModifier)
-      AND uuid IS NOT NULL
+    WHERE uuid IS NOT NULL
+      AND (
+        client_last_seen_at < date('now', @dateModifier)
+        OR (client_last_seen_at IS NULL AND created_at < date('now', @dateModifier))
+      )
   `)
 
   const userRows = selectUsersStatement.all({
