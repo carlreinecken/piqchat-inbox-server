@@ -7,12 +7,12 @@ export function updateAccountContacts (request, response) {
       WHERE uuid = @uuid
     `)
 
-    updateStatement.run({
+    const result = updateStatement.run({
       uuid: request.currentUserUuid,
       contacts: JSON.stringify(request.body.contacts)
     })
 
-    if (updateStatement.changes === 0) {
+    if (result.changes === 0) {
       return response.sendStatus(403)
     }
 

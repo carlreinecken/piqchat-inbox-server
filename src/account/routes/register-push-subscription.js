@@ -7,7 +7,7 @@ export function registerPushSubscription (request, response) {
       WHERE uuid = @uuid
     `)
 
-    updateStatement.run({
+    const result = updateStatement.run({
       subscription: JSON.stringify({
         endpoint: request.body.endpoint,
         keys: request.body.keys
@@ -15,8 +15,9 @@ export function registerPushSubscription (request, response) {
       uuid: request.currentUserUuid
     })
 
-    if (updateStatement.changes === 0) {
-      return response.sendStatus(403)
+    if (result.changes === 0) {
+      response.sendStatus(403)
+      return
     }
 
     response.sendStatus(204)
