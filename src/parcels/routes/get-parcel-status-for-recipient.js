@@ -9,15 +9,15 @@ import { PARCEL_TYPES } from '../../constants.js'
  * The count may be used by the client as rough estimate of read receipts.
  */
 export function getParcelStatusForRecipient (request, response) {
-  const countStatement = db.prepare(`
-    SELECT COUNT (*) AS count
-    FROM parcels
-    WHERE uploaded_by = @uploadedBy
-      AND recipient_uuid = @recipientUuid
-      AND type = '${PARCEL_TYPES.MEDIA}'
-  `)
-
   try {
+    const countStatement = db.prepare(`
+      SELECT COUNT (*) AS count
+      FROM parcels
+      WHERE uploaded_by = @uploadedBy
+        AND recipient_uuid = @recipientUuid
+        AND type = '${PARCEL_TYPES.MEDIA}'
+    `)
+
     const count = countStatement.get({
       uploadedBy: request.currentUserUuid,
       recipientUuid: request.params.recipient

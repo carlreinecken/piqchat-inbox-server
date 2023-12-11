@@ -1,12 +1,12 @@
 import db from '../../database.js'
 
 export function registerPushSubscription (request, response) {
-  const updateStatement = db.prepare(`
-    UPDATE users SET push_subscription_json = @subscription
-    WHERE uuid = @uuid
-  `)
-
   try {
+    const updateStatement = db.prepare(`
+      UPDATE users SET push_subscription_json = @subscription
+      WHERE uuid = @uuid
+    `)
+
     updateStatement.run({
       subscription: JSON.stringify({
         endpoint: request.body.endpoint,
@@ -14,6 +14,10 @@ export function registerPushSubscription (request, response) {
       }),
       uuid: request.currentUserUuid
     })
+
+    if (updateStatement.changes === 0) {
+      return response.sendStatus(403)
+    }
 
     response.sendStatus(204)
   } catch (error) {

@@ -2,17 +2,17 @@ import db from '../../database.js'
 import { parsePushSubscription } from '../send-push-notification.js'
 
 export function getAccount (request, response) {
-  const selectStatement = db.prepare(`
-    SELECT push_subscription_json
-    FROM users
-    WHERE uuid = @uuid
-  `)
-
   try {
+    const selectStatement = db.prepare(`
+      SELECT push_subscription_json
+      FROM users
+      WHERE uuid = @uuid
+    `)
+
     const user = selectStatement.get({ uuid: request.currentUserUuid })
 
     if (!user) {
-      response.sendStatus(404)
+      response.sendStatus(403)
       return
     }
 

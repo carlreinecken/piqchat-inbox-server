@@ -15,25 +15,25 @@ import { calculateTimeToAcceptUntil } from './../calculate-time-to-live.js'
  * - Returns in the response the previously encryptedContact from the table
  */
 export function acceptContactExchange (request, response) {
-  const selectStatement = db.prepare(`
-    SELECT * FROM contact_exchanges
-      WHERE one_time_token = @one_time_token
-  `)
-
-  const updateStatement = db.prepare(`
-    UPDATE contact_exchanges
-      SET state = @state, encrypted_contact = @encrypted_contact
-      WHERE one_time_token = @one_time_token
-  `)
-
-  const insertUserStatement = db.prepare(`
-    INSERT INTO users (uuid, push_subscription_json, contacts_json, created_at, created_by)
-    VALUES (@uuid, '{}', '[]', @created_at, @created_by)
-  `)
-
-  const countUserStatement = db.prepare('SELECT COUNT(*) AS count FROM users WHERE uuid = @uuid')
-
   try {
+    const selectStatement = db.prepare(`
+      SELECT * FROM contact_exchanges
+        WHERE one_time_token = @one_time_token
+    `)
+
+    const updateStatement = db.prepare(`
+      UPDATE contact_exchanges
+        SET state = @state, encrypted_contact = @encrypted_contact
+        WHERE one_time_token = @one_time_token
+    `)
+
+    const insertUserStatement = db.prepare(`
+      INSERT INTO users (uuid, push_subscription_json, contacts_json, created_at, created_by)
+      VALUES (@uuid, '{}', '[]', @created_at, @created_by)
+    `)
+
+    const countUserStatement = db.prepare('SELECT COUNT(*) AS count FROM users WHERE uuid = @uuid')
+
     const row = selectStatement.get({ one_time_token: request.params.oneTimeToken })
 
     if (!row || row.state !== CONTACT_EXCHANGE_STATE.INITIATED) {

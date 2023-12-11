@@ -9,10 +9,11 @@ import { PARCEL_TYPES } from '../../constants.js'
 
 export function uploadParcel (request, response) {
   const contentAuthorizedRecipientsMap = new Map()
-  const forbiddenRecipientIds = []
   const parcelType = request.body.type
 
   try {
+    const forbiddenRecipientIds = []
+
     const recipientFields = Array.isArray(request.body.recipient) ? request.body.recipient : [request.body.recipient]
 
     for (const recipientField of recipientFields) {

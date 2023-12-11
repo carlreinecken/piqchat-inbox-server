@@ -1,16 +1,20 @@
 import db from '../../database.js'
 
 export function updateAccountContacts (request, response) {
-  const updateStatement = db.prepare(`
-    UPDATE users SET contacts_json = @contacts
-    WHERE uuid = @uuid
-  `)
-
   try {
+    const updateStatement = db.prepare(`
+      UPDATE users SET contacts_json = @contacts
+      WHERE uuid = @uuid
+    `)
+
     updateStatement.run({
       uuid: request.currentUserUuid,
       contacts: JSON.stringify(request.body.contacts)
     })
+
+    if (updateStatement.changes === 0) {
+      return response.sendStatus(403)
+    }
 
     response.sendStatus(204)
   } catch (error) {

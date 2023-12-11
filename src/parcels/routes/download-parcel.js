@@ -2,15 +2,15 @@ import * as fs from 'node:fs'
 import db from '../../database.js'
 
 export function downloadParcel (request, response) {
-  const select = db.prepare(`
-    SELECT attachment_filename
-    FROM parcels
-    WHERE recipient_uuid = @recipientUuid
-      AND uuid = @uuid
-    ORDER BY uploaded_at ASC
-  `)
-
   try {
+    const select = db.prepare(`
+      SELECT attachment_filename
+      FROM parcels
+      WHERE recipient_uuid = @recipientUuid
+        AND uuid = @uuid
+      ORDER BY uploaded_at ASC
+    `)
+
     const parameters = {
       recipientUuid: request.currentUserUuid,
       uuid: request.params.uuid

@@ -1,17 +1,17 @@
 import db from '../../database.js'
 import { CONTACT_EXCHANGE_STATE } from '../../constants.js'
 import { calculateTimeToAcceptUntil } from './../calculate-time-to-live.js'
-import { getUserId } from './../get-user-id.js'
+import { getUserId } from '../../shared/get-user-id.js'
 
 export function getContactExchange (request, response) {
-  const select = db.prepare(`
-    SELECT *
-    FROM contact_exchanges
-    WHERE created_by = @current_user_id
-      AND one_time_token = @one_time_token
-  `)
-
   try {
+    const select = db.prepare(`
+      SELECT *
+      FROM contact_exchanges
+      WHERE created_by = @current_user_id
+        AND one_time_token = @one_time_token
+    `)
+
     const userId = getUserId(request.currentUserUuid)
 
     const row = select.get({

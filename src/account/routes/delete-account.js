@@ -5,7 +5,7 @@ export function deleteAccount (request, response) {
     const isSuccessfull = deleteUserAndEverythingAttached(request.currentUserUuid)
 
     if (!isSuccessfull) {
-      return response.sendStatus(404)
+      return response.sendStatus(403)
     }
 
     response.sendStatus(204)

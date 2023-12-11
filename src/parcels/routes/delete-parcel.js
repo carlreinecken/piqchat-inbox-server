@@ -2,14 +2,14 @@ import db from '../../database.js'
 import { deleteParcelAndAttachment } from '../delete-parcel-and-attachment.js'
 
 export function deleteParcel (request, response) {
-  const selectStatement = db.prepare(`
-    SELECT attachment_filename
-    FROM parcels
-    WHERE recipient_uuid = @recipientUuid
-      AND uuid = @uuid
-  `)
-
   try {
+    const selectStatement = db.prepare(`
+      SELECT attachment_filename
+      FROM parcels
+      WHERE recipient_uuid = @recipientUuid
+        AND uuid = @uuid
+    `)
+
     const parcel = selectStatement.get({
       recipientUuid: request.currentUserUuid,
       uuid: request.params.uuid

@@ -2,14 +2,14 @@ import db from '../../database.js'
 import { updateClient } from '../../account/update-client.js'
 
 export function getParcels (request, response) {
-  const select = db.prepare(`
-    SELECT uuid, type, content, uploaded_by, uploaded_at
-    FROM parcels
-    WHERE recipient_uuid = @recipientUuid
-    ORDER BY uploaded_at ASC
-  `)
-
   try {
+    const select = db.prepare(`
+      SELECT uuid, type, content, uploaded_by, uploaded_at
+      FROM parcels
+      WHERE recipient_uuid = @recipientUuid
+      ORDER BY uploaded_at ASC
+    `)
+
     const rows = select.all({ recipientUuid: request.currentUserUuid })
 
     const parcels = rows.map((row) => ({

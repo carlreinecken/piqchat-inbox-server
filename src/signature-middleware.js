@@ -27,7 +27,7 @@ export default function (request, response, next) {
     next()
   } catch (error) {
     response.status(401).send('Signature is invalid')
-    next(error)
+    next(new Error('Invalid Signature'))
   }
 }
 
