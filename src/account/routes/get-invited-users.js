@@ -1,5 +1,5 @@
 import db from '../../database.js'
-import { lastSeenDateToLabel } from '../get-last-seen.js'
+import { lastSeenDateToLabel } from '../../shared/get-user-last-seen.js'
 import { getUserId } from '../../shared/get-user-id.js'
 
 export function getInvitedUsers (request, response) {

@@ -1,5 +1,5 @@
 import db from '../../database.js'
-import { updateClient } from '../../account/update-client.js'
+import { updateUserClient } from '../../shared/update-user-client.js'
 
 export function getParcels (request, response) {
   try {
@@ -31,7 +31,7 @@ export function getParcels (request, response) {
    */
 
   try {
-    updateClient(request.currentUserUuid, request.headers)
+    updateUserClient(request.currentUserUuid, request.headers)
   } catch (error) {
     console.error(error)
   }

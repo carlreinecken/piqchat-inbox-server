@@ -1,5 +1,5 @@
 import db from '../../database.js'
-import { getLastSeen } from '../../account/get-last-seen.js'
+import { getUserLastSeen } from '../../shared/get-user-last-seen.js'
 import { PARCEL_TYPES } from '../../constants.js'
 
 /**
@@ -23,7 +23,7 @@ export function getParcelStatusForRecipient (request, response) {
       recipientUuid: request.params.recipient
     }).count
 
-    const lastSeen = getLastSeen(request.params.recipient)
+    const lastSeen = getUserLastSeen(request.params.recipient)
 
     response.send({ count, lastSeen })
   } catch (error) {

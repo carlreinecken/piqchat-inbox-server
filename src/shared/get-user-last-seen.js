@@ -1,6 +1,6 @@
 import db from '../database.js'
 
-export function getLastSeen (userUuid) {
+export function getUserLastSeen (userUuid) {
   const lastSeenStatement = db.prepare(`
     SELECT client_last_seen_at
     FROM users

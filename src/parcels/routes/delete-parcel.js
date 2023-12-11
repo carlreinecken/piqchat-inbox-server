@@ -1,5 +1,5 @@
 import db from '../../database.js'
-import { deleteParcelAndAttachment } from '../delete-parcel-and-attachment.js'
+import { deleteParcelAndAttachment } from '../../shared/delete-parcel-and-attachment.js'
 
 export function deleteParcel (request, response) {
   try {

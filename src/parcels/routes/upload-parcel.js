@@ -2,7 +2,7 @@ import crypto from 'crypto'
 import * as fs from 'node:fs'
 
 import db from '../../database.js'
-import { sendPushNotification } from '../../account/send-push-notification.js'
+import { sendPushNotification } from '../../shared/send-push-notification.js'
 import { isAcceptingFromContact } from '../../account/is-accepting-from-contact.js'
 import { countReceivedParcels } from '../count-received-parcels.js'
 import { PARCEL_TYPES } from '../../constants.js'

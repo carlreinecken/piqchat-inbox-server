@@ -1,5 +1,5 @@
 import db from '../database.js'
-import { deleteParcelsAndAttachmentForUser } from '../parcels/delete-parcel-and-attachment.js'
+import { deleteParcelsAndAttachmentForUser } from '../shared/delete-parcel-and-attachment.js'
 
 export function deleteUserAndEverythingAttached (userUuid) {
   const deleteBackupStatement = db.prepare(`

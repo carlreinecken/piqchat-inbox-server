@@ -1,5 +1,5 @@
 import db from '../../database.js'
-import { parsePushSubscription } from '../send-push-notification.js'
+import { parsePushSubscription } from '../../shared/send-push-notification.js'
 
 export function getAccount (request, response) {
   try {

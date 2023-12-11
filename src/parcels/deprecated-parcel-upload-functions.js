@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 
 import db from '../database.js'
-import { sendPushNotification } from '../account/send-push-notification.js'
+import { sendPushNotification } from '../shared/send-push-notification.js'
 import { isAcceptingFromContact } from '../account/is-accepting-from-contact.js'
 import { countReceivedParcels } from './count-received-parcels.js'
 
