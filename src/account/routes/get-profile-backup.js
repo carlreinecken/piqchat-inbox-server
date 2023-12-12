@@ -1,4 +1,5 @@
 import db from '../../database.js'
+import { getUserId } from '../../shared/get-user-id.js'
 
 export function getProfileBackup (request, response) {
   try {
@@ -7,6 +8,11 @@ export function getProfileBackup (request, response) {
       FROM profile_backups
       WHERE user_uuid = @user_uuid
     `)
+
+    if (getUserId(request.currentUserUuid) == null) {
+      response.sendStatus(403)
+      return
+    }
 
     const backup = selectStatement.get({ user_uuid: request.currentUserUuid })
 
