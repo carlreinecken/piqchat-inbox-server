@@ -1,7 +1,5 @@
 # Uberspace Setup Guide
 
-## Server
-
 https://manual.uberspace.de/en/lang-nodejs/#run-node-application-in-the-background
 
 Create the file `/home/<user>/etc/services.d/piqchat-inbox-server.ini`:
@@ -68,21 +66,3 @@ supervisorctl start piqchat-inbox-server
 
 - `tail -f ~/logs/supervisord.log`
 - `supervisorctl tail -f piqchat-inbox-server`
-
-## Web app
-
-```
-$ mkdir tmp/web-app-build
-$ git clone repositories/piqchat-web-app tmp/web-app-build
-```
-
-deploy-web-app.sh:
-
-```
-cd tmp/web-app-build
-git pull ../../repositories/piqchat-web-app
-npm install --no-save
-npm run build
-cd ../..
-cp -r tmp/web-app-build/public/. html/
-```
