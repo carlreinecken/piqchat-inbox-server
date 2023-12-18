@@ -1,6 +1,6 @@
 # piqchat-inbox-server
 
-**piqchat** is a web app optimized for iOS and Android that allows you to **share self-destructing images** with your friends. The images are **end-to-end encrypted** and you have the freedom to choose which server you rely on to receive images. The goal of piqchat is to be an app that is fun, social in a good way, respects its users and hides the complexity of encryption server federation.
+**piqchat** ([piqchat.net](https://piqchat.net)) is a web app optimized for iOS and Android that allows you to **share self-destructing images** with your friends. The images are **end-to-end encrypted** and you have the freedom to choose which server you rely on to receive images. The goal of piqchat is to be an app that is fun, social in a good way, respects its users and hides the complexity of encryption and server federation.
 
 You can host an inbox server yourself with the code provided in this repository.
 

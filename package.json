@@ -20,7 +20,7 @@
     "formdata-polyfill": "^4.0.10",
     "mocha": "^10.2.0",
     "node-fetch": "^3.3.2",
-    "nodemon": "^2.0.21"
+    "nodemon": "^3.0.2"
   },
   "dependencies": {
     "better-sqlite3": "^8.2.0",
