@@ -1,0 +1,25 @@
+services:
+  piqchat-inbox-server:
+    image: piqchat-inbox-server:latest
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+
+
+
+
+# TODO: - dockerize nginx?
+#       - troubleshoot volumes
+#services:
+#  piqchat-inbox-server:
+#    image: piqchat-inbox-server:latest
+#    volumes:
+#      - ./database_test:/db
+#      - ./upload_test:/uploads
+#    ports:
+#      - "8080:8080"
+#    env_file:
+#      - .env
+#  webserver:
+#    image: nginx:1.25-alpine
