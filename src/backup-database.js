@@ -1,35 +1,12 @@
 import { exec } from 'child_process'
-import dotenv from 'dotenv'
-dotenv.config()
+import db from './database.js'
 
-export function backupDatabase () {
+export async function backupDatabase () {
   const date = (new Date()).toISOString().split('T')[0]
   const databaseBackupPathPrefix = 'backup/database-backup-'
 
-  const backupCommand = `sqlite3 ${process.env.DATABASE_PATH} ".backup ${databaseBackupPathPrefix}${date}.sqlite"`
+  await db.backup(`${databaseBackupPathPrefix}${date}.sqlite`)
+  console.log(`Database backup ${databaseBackupPathPrefix}${date}.sqlite done.`)
 
-  executeCommand(backupCommand)
-
-  const cleanupCommand = `find ./${databaseBackupPathPrefix}*.sqlite -mtime +7 -type f -delete`
-
-  executeCommand(cleanupCommand)
+  exec(`find ./${databaseBackupPathPrefix}*.sqlite -mtime +7 -type f -delete`)
 }
-
-function executeCommand (command) {
-  exec(command, (error, stdout, stderr) => {
-    if (error) {
-      console.error(error)
-      return
-    }
-
-    if (stdout) {
-      console.log(stdout)
-    }
-
-    if (stderr) {
-      console.error(stderr)
-    }
-  })
-}
-
-backupDatabase()
