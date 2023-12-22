@@ -1,25 +1,18 @@
 services:
   piqchat-inbox-server:
     image: piqchat-inbox-server:latest
+    
     ports:
-      - "8080:8080"
+      # [HOSTPORT:PIQCHATPORT]
+      - "8080:8080"                 # CHANGEME (HOSTPORT)
+
+    # Volumes containing database and user uploads
+    volumes:
+      # [HOSTPATH:PIQCHATPATH]
+      - ./piqchat_db:/db            # CHANGEME (HOSTPATH)
+      - ./piqchat_uploads:/uploads  # CHANGEME (HOSTPATH)
+
     env_file:
       - .env
+    restart: always
 
-
-
-
-# TODO: - dockerize nginx?
-#       - troubleshoot volumes
-#services:
-#  piqchat-inbox-server:
-#    image: piqchat-inbox-server:latest
-#    volumes:
-#      - ./database_test:/db
-#      - ./upload_test:/uploads
-#    ports:
-#      - "8080:8080"
-#    env_file:
-#      - .env
-#  webserver:
-#    image: nginx:1.25-alpine

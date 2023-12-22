@@ -7,7 +7,7 @@ COPY . /app
 RUN mkdir /db
 RUN mkdir /uploads
 
-# install & run
+# Install & run
 WORKDIR /app
 RUN npm install
 RUN npm run migrate
