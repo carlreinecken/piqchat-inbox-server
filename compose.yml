@@ -3,14 +3,11 @@ services:
     image: piqchat-inbox-server:latest
     
     ports:
-      # [HOSTPORT:PIQCHATPORT]
-      - "8080:8080"                 # CHANGEME (HOSTPORT)
+      - "8080:8080"
 
-    # Volumes containing database and user uploads
     volumes:
-      # [HOSTPATH:PIQCHATPATH]
-      - ./piqchat_db:/db            # CHANGEME (HOSTPATH)
-      - ./piqchat_uploads:/uploads  # CHANGEME (HOSTPATH)
+      - ./database:/app/database
+      - ./uploads:/app/uploads
 
     env_file:
       - .env

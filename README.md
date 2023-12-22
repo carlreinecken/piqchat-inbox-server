@@ -11,13 +11,8 @@ A piqchat user needs to sign up to an inbox server to be able to receive images.
 
 #### Setup
 1. `cp example.env .env`
-2. Edit `.env`
-    - Change `DATABASE_PATH` to `/db/database.sqlite`
-    - Change `PARCEL_ATTACHMENTS_UPLOAD_PATH` to `/uploads/parcel_attachments`
-    - Add personal information to the admin section
-3. Create directories where you want your database and uploads to live
+2. Add personal information to the admin section in `.env`
 4. Edit `compose.yml`
-    - Change both volume paths to point to the directories created in (3)
     - (Optional) Change "HOSTPORT" to where piqchat should run
 5. `docker-compose up -d`
 
