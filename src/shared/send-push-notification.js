@@ -1,13 +1,13 @@
 import webpush from 'web-push'
 import db from '../database.js'
 
-const vapidDetails = {
-  publicKey: process.env.VAPID_PUBLIC_KEY,
-  privateKey: process.env.VAPID_PRIVATE_KEY,
-  subject: process.env.PUSH_VAPID_CONTACT
-}
-
 export async function sendPushNotification (recipientUuid, payload) {
+  const vapidDetails = {
+    publicKey: process.env.VAPID_PUBLIC_KEY,
+    privateKey: process.env.VAPID_PRIVATE_KEY,
+    subject: process.env.PUSH_VAPID_CONTACT
+  }
+
   const selectUserStatement = db.prepare(`
     SELECT push_subscription_json FROM users WHERE uuid = @recipientUuid
   `)
