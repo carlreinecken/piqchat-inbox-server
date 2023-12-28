@@ -4,7 +4,7 @@ import db from '../database.js'
 const vapidDetails = {
   publicKey: process.env.VAPID_PUBLIC_KEY,
   privateKey: process.env.VAPID_PRIVATE_KEY,
-  subject: process.env.VAPID_SUBJECT
+  subject: process.env.PUSH_VAPID_CONTACT
 }
 
 export async function sendPushNotification (recipientUuid, payload) {
@@ -25,7 +25,7 @@ export async function sendPushNotification (recipientUuid, payload) {
   }
 
   const options = {
-    TTL: 60 * 60 * 24 * process.env.TIME_TO_LIVE_ON_PUSH_SERVICE_IN_DAYS,
+    TTL: 60 * 60 * 24 * process.env.PUSH_TIME_TO_LIVE_ON_SERVICE_IN_DAYS,
     vapidDetails
   }
 

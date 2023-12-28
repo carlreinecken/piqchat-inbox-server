@@ -8,7 +8,7 @@ export function getInfo (_, response) {
       vapidPublicKey: process.env.VAPID_PUBLIC_KEY,
       adminDisplayName: process.env.ADMIN_DISPLAY_NAME,
       adminMessage: process.env.ADMIN_MESSAGE,
-      privacyPolicyUrl: process.env.PRIVACY_POLICY_URL,
+      privacyPolicyUrl: process.env.ADMIN_PRIVACY_POLICY_URL,
       statistics: calculateStatistics()
     })
   } catch (error) {

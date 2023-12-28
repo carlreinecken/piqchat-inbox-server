@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS contact_exchanges (
     one_time_token TEXT NOT NULL,
     encrypted_contact TEXT,
     created_at TEXT NOT NULL,
-    created_by INTEGER NOT NULL
+    created_by INTEGER
 );
 
 -- DOWN

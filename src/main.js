@@ -4,8 +4,14 @@ import path from 'path'
 import * as dotenv from 'dotenv'
 import { apiRouter } from './api-router.js'
 import { startScheduler, stopScheduler } from './scheduler.js'
+import { loadDatabaseConfigAsEnvVars } from './load-database-config-as-env-vars.js'
+import { createStartupContactExchangeUrl } from './contact-exchange/create-contact-exchange-for-signup.js'
 
 dotenv.config()
+
+createStartupContactExchangeUrl(process.env.CREATE_SIGN_UP_INVITE != null)
+
+loadDatabaseConfigAsEnvVars()
 
 const app = express()
 
