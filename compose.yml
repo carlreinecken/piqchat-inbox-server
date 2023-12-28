@@ -1,16 +1,20 @@
 services:
   piqchat-inbox-server:
     image: piqchat-inbox-server:latest
-    
+
     ports:
       - "8080:8080"
 
     volumes:
-      - ./database:/app/database
-      - ./uploads:/app/uploads
+      - ./database:/database
+      - ./uploads:/uploads
 
     env_file:
       - .env
 
-    restart: on-failure
+    environment:
+      - PORT=8080
+      - DATABASE_PATH=/database/database.sqlite
+      - PARCEL_ATTACHMENTS_UPLOAD_PATH=/uploads/parcel_attachments/
 
+    restart: on-failure
