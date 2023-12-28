@@ -1,10 +1,10 @@
 # piqchat-inbox-server
 
-**piqchat** ([piqchat.net](https://piqchat.net)) is a web app optimized for iOS and Android that allows you to **share self-destructing images** with your friends. The images are **end-to-end encrypted** and you have the freedom to choose which inbox server you rely on to receive images. The goal of piqchat is to be an app that is fun, social in a good way, respects its users and hides the complexity of encryption and server federation.
+**piqchat** ([piqchat.net](https://piqchat.net)) is a web app optimized for iOS Safari and Chrome on Android that allows you to **share self-destructing images** with your friends. The images are **end-to-end encrypted** and you have the **freedom to choose which inbox server** you rely on to receive images. The goal of piqchat is to be an app that is fun, social in a good way, respects its users and hides the complexity of encryption and server federation.
 
 A piqchat user needs to sign up to an inbox server to be able to receive images. You can host an inbox server yourself with the code provided in this repository.
 
-## Installation
+## Deployment
 
 ### Docker
 
@@ -14,27 +14,21 @@ TODO
 
 You'll need git and Node.js.
 
-Checkout the repository with the latest stable version:
-
-```sh
-git clone https://github.com/carlreinecken/piqchat-inbox-server
-cd piqchat-inbox-server
-git checkout $(git tag -l | grep '^v[0-9.]*$' | sort -V | tail -n 1)
-```
+Get the [latest release of this repository](https://github.com/carlreinecken/piqchat-inbox-server/releases/latest) and unpack it.
 
 Run `npm install` inside the project repository.
 
-Save the example.env as .env file and replace the values accordingly. To generate your keys run `node bin/create-keys.js` and copy the output in your .env file.
+Copy the example.env file and save it as .env file and replace the values accordingly. Values with an empty string are required.
 
 Next setup the sqlite database with `npm run migrate`.
 
 Afterwards you can start the server with `npm run start` or `node src/main.js`.
 
-Create your first user with `node bin/create-user-signup-token.js <uuid>`, you can get your user uuid when creating a profile in the piqchat app.
+The server will print an "invite link" that you can use in the piqchat web app to create your first user on your new server. The app will ask you to enter the domain of your inbox server. Note that this user won't have any special rights.
 
-### What does the server do?
+## What does the server do?
 
-Inbox servers for piqchat are supposed to be small. The server uses a sqlite3 database, and everything is deleted as soon as it's not needed anymore.
+Inbox servers for piqchat are supposed to be lightweight. The server uses a sqlite3 database, and everything is deleted as soon as it's not needed anymore.
 
 A piqchat user needs to sign up to an inbox server to be able to receive images. From a technical perspective, the user doesn't need to be registered on an inbox server if they only want to send images, because images are directly uploaded to the inbox server of the recipient.
 

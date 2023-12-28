@@ -27,7 +27,7 @@ describe('contact exchange routes', function () {
     expect(response.status).to.equal(201)
 
     expect(body.oneTimeToken).to.have.lengthOf(36)
-    expect(body.acceptUrl).to.have.string(`${url}/${body.oneTimeToken}/accept`)
+    expect(body.acceptUrl.replace('https:', 'http:')).to.have.string(`${url}/${body.oneTimeToken}/accept`)
     expect(new Date(body.timeToLive)).to.be.instanceof(Date)
   })
 
@@ -92,7 +92,7 @@ describe('contact exchange routes', function () {
     })
     const createBody = await createResponse.json()
 
-    const acceptResponse = await fetch(`${createBody.acceptUrl}`, {
+    const acceptResponse = await fetch(`${createBody.acceptUrl.replace('https:', 'http:')}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ encryptedContact: '$encryptedContact_answer' })
@@ -126,7 +126,7 @@ describe('contact exchange routes', function () {
     const createBody = await createResponse.json()
 
     const userUuid = tweetnaclUtil.encodeBase64(tweetnacl.randomBytes(tweetnacl.box.publicKeyLength))
-    const acceptResponse = await fetch(`${createBody.acceptUrl}`, {
+    const acceptResponse = await fetch(`${createBody.acceptUrl.replace('https:', 'http:')}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

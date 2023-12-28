@@ -16,6 +16,11 @@ import { calculateTimeToAcceptUntil } from './../calculate-time-to-live.js'
  */
 export function acceptContactExchange (request, response) {
   try {
+    if (request.body.userUuid == null && request.body.encryptedContact == null) {
+      response.status(400).send('The friend invite can not be accepted without encrypted contact information or a user uuid to sign up.')
+      return
+    }
+
     const selectStatement = db.prepare(`
       SELECT * FROM contact_exchanges
         WHERE one_time_token = @one_time_token

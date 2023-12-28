@@ -1,8 +1,8 @@
 import db from '../../database.js'
-import crypto from 'crypto'
 import { CONTACT_EXCHANGE_STATE } from '../../constants.js'
 import { calculateTimeToAcceptUntil } from './../calculate-time-to-live.js'
 import { getUserId } from '../../shared/get-user-id.js'
+import { createAcceptUrl } from '../create-accept-url.js'
 
 export function createContactExchange (request, response) {
   try {
@@ -11,7 +11,7 @@ export function createContactExchange (request, response) {
       VALUES (@one_time_token, @state, @encrypted_contact, @created_at, @created_by)
     `)
 
-    const oneTimeToken = crypto.randomUUID()
+    const { acceptUrl, oneTimeToken } = createAcceptUrl(request.get('host'))
     const createdAt = new Date()
     const timeToLive = calculateTimeToAcceptUntil(createdAt)
 
@@ -29,11 +29,9 @@ export function createContactExchange (request, response) {
       created_at: createdAt.toISOString()
     })
 
-    const protocol = process.env.NODE_ENV === 'production' ? 'https' : request.protocol
-
     response.status(201).send({
       oneTimeToken,
-      acceptUrl: `${protocol}://${request.get('host')}/api/contact-exchange/${oneTimeToken}/accept`,
+      acceptUrl,
       timeToLive
     })
   } catch (error) {
