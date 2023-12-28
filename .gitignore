@@ -5,3 +5,4 @@ node_modules
 !example.env
 !test.env
 parcel_attachments/
+uploads/
