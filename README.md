@@ -8,7 +8,18 @@ A piqchat user needs to sign up to an inbox server to be able to receive images.
 
 ### Docker
 
-TODO
+#### Requirements
+
+- `docker`
+- `docker-compose`
+
+#### Setup
+
+1. `cp example.env .env`
+2. Add personal information to the admin section in `.env`
+4. Edit `compose.yml`
+    - (Optional) Change "HOSTPORT" to where piqchat should run
+5. `docker-compose up -d`
 
 ### Manual
 

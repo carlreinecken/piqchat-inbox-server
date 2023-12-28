@@ -1,0 +1,16 @@
+services:
+  piqchat-inbox-server:
+    image: piqchat-inbox-server:latest
+    
+    ports:
+      - "8080:8080"
+
+    volumes:
+      - ./database:/app/database
+      - ./uploads:/app/uploads
+
+    env_file:
+      - .env
+
+    restart: on-failure
+
