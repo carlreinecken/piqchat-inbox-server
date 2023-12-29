@@ -20,7 +20,7 @@ A sqlite database is created.
 
 ### Manual
 
-You'll need `git` and `node`.
+You'll need `node`.
 
 1. Get the [latest release of this repository](https://github.com/carlreinecken/piqchat-inbox-server/releases/latest) and unpack it.
 2. Run `npm install` inside the project repository.
@@ -31,11 +31,11 @@ Afterwards you can start the server with `npm run start` or `node src/main.js`.
 
 ## Create a user
 
-TL;DR After deployment use the invite link printed out in the console in the piqchat web app.
+TL;DR After deployment use the invite link printed out in the server logs in the piqchat web app.
 
 Usually users are created when they accept a friend invite and have not signed up anywhere else.
 
-After the first server startup an "invite link" is printed out that you can use in the piqchat web app to create your first user. The app will ask you to enter the domain of your inbox server. Note that this is a standard user and it doesn't have any special rights.
+After the first server startup an "invite link" is printed out in the server logs that you can use in the piqchat web app to create your first user. The app will ask you to enter the domain of your inbox server. Note that this is a standard user and it doesn't have any special rights.
 
 The invite link expires after the duration you specified in the .env file. After restarting it should print out a new invite link if the previous one expired. When deployed with docker, you can force to generate a new invite link on startup with the environment variable `CREATE_SIGN_UP_INVITE=true`. Without a container you can run `node bin/create-signup-contact-exchange.js`.
 
