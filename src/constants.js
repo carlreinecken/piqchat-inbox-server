@@ -14,3 +14,9 @@ export const CLEANUP_INACTIVE_USERS_AFTER_DAYS = 365
 export const CONTACT_EXCHANGE_HOST_PLACEHOLDER = 'input_inbox_server_host' // This is lowercase because it is part of an URL
 
 export const WEB_APP_DOMAIN = 'piqchat.net'
+
+export const DEPLOYMENT_DEFAULTS = {
+  PORT: 8080,
+  DATABASE_PATH: 'database/database.sqlite',
+  PARCEL_ATTACHMENTS_UPLOAD_PATH: 'uploads/parcel_attachments/'
+}

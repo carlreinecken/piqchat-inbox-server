@@ -6,6 +6,7 @@ import { apiRouter } from './api-router.js'
 import { startScheduler, stopScheduler } from './scheduler.js'
 import { loadDatabaseConfigAsEnvVars } from './load-database-config-as-env-vars.js'
 import { createStartupContactExchangeUrl } from './contact-exchange/create-contact-exchange-for-signup.js'
+import { DEPLOYMENT_DEFAULTS } from './constants.js'
 
 dotenv.config()
 
@@ -25,7 +26,7 @@ app.get('/', (_, response) => {
 
 app.use('/api/', apiRouter)
 
-const server = app.listen(process.env.PORT, () => {
+const server = app.listen(process.env.PORT ?? DEPLOYMENT_DEFAULTS.PORT, () => {
   console.log(`Listening on port ${server.address().port} with pid ${process?.pid}`)
 })
 

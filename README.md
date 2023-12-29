@@ -6,36 +6,38 @@ A piqchat user needs to sign up to an inbox server to be able to receive images.
 
 ## Deployment
 
+TLS is a requirement.
+
 ### Docker
 
-#### Requirements
+You'll need `docker` and `docker-compose`.
 
-- `docker`
-- `docker-compose`
+1. Set up your compose.yml, take the [compose.yml](compose.yml) in this repository as template.
+2. Take the [example.env](example.env) as template for your .env file and fill in the empty variables.
+3. `docker-compose up`
 
-#### Setup
-
-1. `cp example.env .env`
-2. Add personal information to the admin section in `.env`
-4. Edit `compose.yml`
-    - (Optional) Change "HOSTPORT" to where piqchat should run
-5. `docker-compose up -d`
+A sqlite database is created.
 
 ### Manual
 
-You'll need git and Node.js.
+You'll need `git` and `node`.
 
-Get the [latest release of this repository](https://github.com/carlreinecken/piqchat-inbox-server/releases/latest) and unpack it.
-
-Run `npm install` inside the project repository.
-
-Copy the example.env file and save it as .env file and replace the values accordingly. Values with an empty string are required.
-
-Next setup the sqlite database with `npm run migrate`.
+1. Get the [latest release of this repository](https://github.com/carlreinecken/piqchat-inbox-server/releases/latest) and unpack it.
+2. Run `npm install` inside the project repository.
+3. Copy the [example.env](example.env) file and save it as .env file and fill in the empty variables.
+4. Next setup the sqlite database with `npm run migrate`.
 
 Afterwards you can start the server with `npm run start` or `node src/main.js`.
 
-The server will print an "invite link" that you can use in the piqchat web app to create your first user on your new server. The app will ask you to enter the domain of your inbox server. Note that this user won't have any special rights.
+## Create a user
+
+TL;DR After deployment use the invite link printed out in the console in the piqchat web app.
+
+Usually users are created when they accept a friend invite and have not signed up anywhere else.
+
+After the first server startup an "invite link" is printed out that you can use in the piqchat web app to create your first user. The app will ask you to enter the domain of your inbox server. Note that this is a standard user and it doesn't have any special rights.
+
+The invite link expires after the duration you specified in the .env file. After restarting it should print out a new invite link if the previous one expired. When deployed with docker, you can force to generate a new invite link on startup with the environment variable `CREATE_SIGN_UP_INVITE=true`. Without a container you can run `node bin/create-signup-contact-exchange.js`.
 
 ## What does the server do?
 

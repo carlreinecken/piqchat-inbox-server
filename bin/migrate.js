@@ -1,6 +1,7 @@
 import * as fs from 'node:fs'
 import * as dotenv from 'dotenv'
 import Database from 'better-sqlite3'
+import { DEPLOYMENT_DEFAULTS } from '../src/constants.js'
 
 /**
  * Migrate the database.sqlite to the latest version.
@@ -96,7 +97,7 @@ export function migrate (db, targetVersion = null, migrationsPath = './migration
 if (IS_IN_CLI) {
   dotenv.config()
 
-  const db = new Database(process.env.DATABASE_PATH)
+  const db = new Database(process.env.DATABASE_PATH ?? DEPLOYMENT_DEFAULTS.DATABASE_PATH)
 
   migrate(db, process.argv[2])
 }
