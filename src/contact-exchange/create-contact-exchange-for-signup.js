@@ -46,5 +46,5 @@ export function createStartupContactExchangeUrl (ignoreCounts) {
 
   const url = createContactExchangeForSignup()
 
-  console.log(`\nAccept this invite link in the ${WEB_APP_DOMAIN} web app (can also be scanned as QR code):\n${url}\n\n`)
+  console.log(`\nAccept this invite link in the ${WEB_APP_DOMAIN} web app to create your first user (can also be scanned as QR code):\n${url}\n\n`)
 }

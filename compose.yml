@@ -1,6 +1,6 @@
 services:
   piqchat-inbox-server:
-    image: piqchat-inbox-server:latest
+    image: piqchat/piqchat-inbox-server:latest
 
     ports:
       - "8080:8080"
