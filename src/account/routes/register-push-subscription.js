@@ -10,7 +10,8 @@ export function registerPushSubscription (request, response) {
     const result = updateStatement.run({
       subscription: JSON.stringify({
         endpoint: request.body.endpoint,
-        keys: request.body.keys
+        keys: request.body.keys,
+        encoding: request.body?.encoding
       }),
       uuid: request.currentUserUuid
     })

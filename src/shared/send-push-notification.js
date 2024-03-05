@@ -26,7 +26,8 @@ export async function sendPushNotification (recipientUuid, payload) {
 
   const options = {
     TTL: 60 * 60 * 24 * process.env.PUSH_TIME_TO_LIVE_ON_SERVICE_IN_DAYS,
-    vapidDetails
+    vapidDetails,
+    contentEncoding: subscription?.encoding
   }
 
   try {
